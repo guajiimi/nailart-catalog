@@ -81,14 +81,14 @@ def api_categories():
 # --- PUBLIC PAGES ---
 @app.get("/", response_class=HTMLResponse)
 def catalog(request: Request):
-    return templates.TemplateResponse("catalog.html", {"request": request})
+    return templates.TemplateResponse(request=request, name="catalog.html")
 
 # --- ADMIN ---
 @app.get("/admin/login", response_class=HTMLResponse)
 def admin_login_page(request: Request, error: str = ""):
     if get_admin(request):
         return RedirectResponse("/admin", status_code=302)
-    return templates.TemplateResponse("admin_login.html", {"request": request, "error": error})
+    return templates.TemplateResponse(request=request, name="admin_login.html", context={"error": error})
 
 @app.post("/admin/login")
 def admin_login(request: Request, username: str = Form(...), password: str = Form(...)):
@@ -96,9 +96,7 @@ def admin_login(request: Request, username: str = Form(...), password: str = For
     admin = conn.execute("SELECT * FROM admins WHERE username = ?", (username,)).fetchone()
     conn.close()
     if not admin or admin["password_hash"] != hash_pw(password):
-        return templates.TemplateResponse("admin_login.html", {
-            "request": request, "error": "Username atau password salah"
-        })
+        return templates.TemplateResponse(request=request, name="admin_login.html", context={"error": "Username atau password salah"})
     token = make_token(admin["id"], admin["username"])
     resp = RedirectResponse("/admin", status_code=302)
     resp.set_cookie("admin_session", token, httponly=True, max_age=86400)
@@ -121,8 +119,7 @@ def admin_dashboard(request: Request):
         "SELECT category, COUNT(*) as count FROM designs GROUP BY category ORDER BY category"
     ).fetchall()
     conn.close()
-    return templates.TemplateResponse("admin.html", {
-        "request": request,
+    return templates.TemplateResponse(request=request, name="admin.html", context={
         "admin": admin,
         "designs": [dict(d) for d in designs],
         "categories": [dict(c) for c in categories],
