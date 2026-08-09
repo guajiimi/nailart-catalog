@@ -1,0 +1,17 @@
+{
+  "name": "nailart-catalog",
+  "version": "1.0.0",
+  "description": "Full-stack nail art catalog with admin dashboard. FastAPI + SQLite + Jinja2.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "better-sqlite3": "^12.11.1",
+    "cookie-parser": "^1.4.7",
+    "express": "^5.2.1"
+  }
+}
