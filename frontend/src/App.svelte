@@ -8,6 +8,7 @@
   let activeCat = $state('all');
   let view = $state('grid');
   let selected = $state(null);
+  let sidebarOpen = $state(false);
 
   onMount(async () => {
     try {
@@ -33,6 +34,7 @@
 
   function selectCat(cat) {
     activeCat = cat;
+    sidebarOpen = false;
   }
 
   function selectDesign(d) {
@@ -48,10 +50,12 @@
   }
 </script>
 
-<svelte:window onkeydown={(e) => { if (e.key === 'Escape') selected = null; }} />
+<svelte:window onkeydown={(e) => { if (e.key === 'Escape') { selected = null; sidebarOpen = false; } }} />
 
 <div class="app">
-  <aside class="sidebar">
+  <div class="sidebar-overlay" class:active={sidebarOpen} onclick={() => sidebarOpen = false} role="presentation"></div>
+
+  <aside class="sidebar" class:open={sidebarOpen}>
     <div class="sidebar-header">
       <div class="logo"><div class="logo-dot"></div> Nail Studio</div>
       <div class="tagline">Premium nail art & care</div>
@@ -93,6 +97,9 @@
 
     <div class="topbar">
       <div class="topbar-left">
+        <button class="hamburger" onclick={() => sidebarOpen = !sidebarOpen} aria-label="Menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
         <h1>Gallery</h1>
         <span class="count-badge">{filtered.length} desain</span>
       </div>
@@ -289,15 +296,39 @@
   .detail-wa { display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background: #25D366; color: #fff; text-decoration: none; font-size: 0.85rem; font-weight: 600; border-radius: 6px; transition: all 0.2s; }
   .detail-wa:hover { background: #128C7E; transform: translateY(-1px); }
 
+  .hamburger { display: none; background: none; border: 1px solid #E7E5E4; padding: 0.4rem 0.6rem; cursor: pointer; border-radius: 6px; color: #1C1917; }
+  .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 299; }
+
   @media (max-width: 900px) {
-    .sidebar { display: none; }
+    .hamburger { display: flex; }
+    .sidebar { position: fixed; left: -300px; top: 0; height: 100vh; z-index: 300; transition: left 0.3s cubic-bezier(0.16,1,0.3,1); width: 280px; box-shadow: none; display: flex; }
+    .sidebar.open { left: 0; box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+    .sidebar-overlay.active { display: block; }
     .view-toggle { display: none; }
+    .count-badge { display: none; }
+    .detail { position: fixed; right: 0; top: 0; height: 100vh; width: 100vw; max-width: 100vw; z-index: 301; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.16,1,0.3,1); }
+    .detail.open { transform: translateX(0); }
     .grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0.75rem; }
     .grid-wrap { padding: 1rem; }
     .topbar { padding: 0.75rem 1rem; }
-    .detail { position: fixed; right: 0; top: 0; height: 100vh; width: 100vw; z-index: 301; }
+    .topbar h1 { font-size: 1rem; }
+    .search { width: 140px; font-size: 0.75rem; }
+    .cta-banner { margin: 0.75rem 1rem 0; padding: 0.75rem 1rem; gap: 0.75rem; }
+    .cta-icon { width: 36px; height: 36px; }
+    .cta-icon :global(svg) { width: 16px; height: 16px; }
+    .cta-title { font-size: 0.8rem; }
+    .cta-sub { font-size: 0.7rem; }
+    .cta-btn { padding: 0.4rem 0.75rem; font-size: 0.7rem; }
   }
   @media (max-width: 480px) {
     .grid { grid-template-columns: repeat(2, 1fr); gap: 0.6rem; }
+    .card-info { padding: 0.6rem 0.75rem; }
+    .card-name { font-size: 0.8rem; }
+    .card-price { font-size: 0.75rem; }
+    .card-cat { font-size: 0.5rem; }
+    .search { width: 120px; }
+    .detail-body { padding: 1.25rem; }
+    .detail-body h2 { font-size: 1.25rem; }
+    .detail-price { font-size: 1.5rem; }
   }
 </style>
