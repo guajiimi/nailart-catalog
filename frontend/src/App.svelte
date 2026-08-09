@@ -80,6 +80,17 @@
   </aside>
 
   <main class="main">
+    <div class="ornaments">
+      <div class="orn orn-1"></div>
+      <div class="orn orn-2"></div>
+      <div class="orn orn-3"></div>
+      <div class="orn orn-4"></div>
+      <div class="orn orn-5"></div>
+      <div class="orn orn-6"></div>
+      <div class="orn orn-7"></div>
+      <div class="orn orn-8"></div>
+    </div>
+
     <div class="topbar">
       <div class="topbar-left">
         <h1>Gallery</h1>
@@ -175,6 +186,7 @@
   .app { display: flex; height: 100vh; overflow: hidden; }
 
   .sidebar { width: 272px; min-width: 272px; background: #F5F0EC; border-right: 1px solid #E7E5E4; display: flex; flex-direction: column; height: 100vh; overflow-y: auto; position: relative; }
+  .sidebar::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgba(194,149,107,0.1) 1px, transparent 0); background-size: 20px 20px; pointer-events: none; }
   .sidebar-header { padding: 2rem 1.5rem 1rem; position: relative; z-index: 1; }
   .logo { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3em; display: flex; align-items: center; gap: 0.5rem; }
   .logo-dot { width: 8px; height: 8px; background: #C2956B; border-radius: 50%; }
@@ -193,7 +205,24 @@
   .wa-link { display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.65rem 1rem; background: #25D366; color: #fff; text-decoration: none; font-size: 0.8rem; font-weight: 600; border-radius: 6px; transition: all 0.2s; }
   .wa-link:hover { background: #128C7E; transform: translateY(-1px); }
 
-  .main { flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+  .main { flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden; position: relative; }
+  .main::before { content: ''; position: absolute; top: -120px; right: -120px; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(194,149,107,0.18) 0%, transparent 70%); pointer-events: none; z-index: 0; }
+  .main::after { content: ''; position: absolute; bottom: -80px; left: 20%; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(194,149,107,0.12) 0%, transparent 70%); pointer-events: none; z-index: 0; }
+  .main > :global(*) { position: relative; z-index: 1; }
+
+  .ornaments { position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .orn { position: absolute; opacity: 0.3; }
+  .orn-1 { top: 15%; right: 8%; width: 200px; height: 200px; border: 2px solid #C2956B; border-radius: 50%; animation: float-slow 20s ease-in-out infinite; }
+  .orn-2 { top: 60%; right: 15%; width: 120px; height: 120px; border: 2px solid #C2956B; border-radius: 50%; animation: float-slow 25s ease-in-out infinite reverse; }
+  .orn-3 { top: 30%; left: 45%; width: 80px; height: 80px; background: #C2956B; border-radius: 50%; animation: float-slow 18s ease-in-out infinite; }
+  .orn-4 { bottom: 20%; right: 30%; width: 140px; height: 140px; border: 2px solid #C2956B; transform: rotate(45deg); animation: float-rotate 22s ease-in-out infinite reverse; }
+  .orn-5 { top: 45%; left: 10%; width: 60px; height: 60px; background: #C2956B; border-radius: 50%; animation: float-slow 15s ease-in-out infinite; }
+  .orn-6 { bottom: 35%; left: 35%; width: 100px; height: 100px; border: 2px solid #C2956B; border-radius: 50%; animation: float-slow 28s ease-in-out infinite; }
+  .orn-7 { top: 80%; right: 5%; width: 50px; height: 50px; background: #C2956B; border-radius: 50%; animation: float-slow 12s ease-in-out infinite; }
+  .orn-8 { top: 10%; left: 30%; width: 70px; height: 70px; border: 1.5px solid #C2956B; border-radius: 50%; animation: float-slow 30s ease-in-out infinite reverse; }
+
+  @keyframes float-slow { 0%,100%{transform:translate(0,0)} 25%{transform:translate(10px,-15px)} 50%{transform:translate(-5px,10px)} 75%{transform:translate(8px,5px)} }
+  @keyframes float-rotate { 0%,100%{transform:rotate(45deg) translate(0,0)} 25%{transform:rotate(50deg) translate(10px,-15px)} 50%{transform:rotate(40deg) translate(-5px,10px)} 75%{transform:rotate(48deg) translate(8px,5px)} }
   .topbar { padding: 1rem 2rem; border-bottom: 1px solid #E7E5E4; display: flex; align-items: center; justify-content: space-between; background: #fff; }
   .topbar-left { display: flex; align-items: center; gap: 0.75rem; }
   .topbar h1 { font-size: 1.15rem; font-weight: 600; letter-spacing: -0.02em; }
@@ -219,7 +248,8 @@
   .cta-btn:hover { background: #128C7E; }
 
   .content { flex: 1; display: flex; overflow: hidden; }
-  .grid-wrap { flex: 1; overflow-y: auto; padding: 1.5rem 2rem; }
+  .grid-wrap { flex: 1; overflow-y: auto; padding: 1.5rem 2rem; position: relative; }
+  .grid-wrap::before { content: ''; position: fixed; top: 0; right: 0; bottom: 0; left: 272px; background-image: radial-gradient(circle at 1px 1px, rgba(28,25,23,0.08) 1px, transparent 0); background-size: 24px 24px; pointer-events: none; z-index: 0; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.25rem; }
   .grid.list-view { grid-template-columns: 1fr; gap: 0.75rem; }
 
